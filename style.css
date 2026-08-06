@@ -1,0 +1,359 @@
+:root {
+  --ink:      #101820;
+  --card:     #1B2530;
+  --card-2:   #212D3A;
+  --line:     #2C3A48;
+  --text:     #E8EDF2;
+  --muted:    #8CA0B3;
+  --teal:     #4FD1C5;
+  --amber:    #F2B134;
+  --danger:   #e81111;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --radius: 14px;
+  --wrap: 1080px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* subtle grain so the flat ink background doesn't feel dead */
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image:
+    radial-gradient(circle at 20% 20%, #fff 0.5px, transparent 0.5px),
+    radial-gradient(circle at 60% 70%, #fff 0.5px, transparent 0.5px);
+  background-size: 3px 3px, 5px 5px;
+  z-index: 0;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  border-bottom: 1px solid var(--line);
+  padding-block: clamp(1rem, 3vw, 1.5rem);
+}
+
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.18);
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  letter-spacing: 0.01em;
+}
+
+.server-line {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.server-line time { color: var(--teal); }
+
+/* ---------- Layout ---------- */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(1.25rem, 3vw, 2rem);
+  padding-block: clamp(1.75rem, 4vw, 3rem);
+  align-items: start;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* ---------- Form panel ---------- */
+.form-panel h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0 0 1.5rem;
+  max-width: 42ch;
+}
+
+.field {
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+input, textarea {
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 0.65rem 0.8rem;
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input::placeholder, textarea::placeholder { color: #5C6B7A; }
+
+input:focus-visible, textarea:focus-visible, button:focus-visible {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.22);
+}
+
+.field.has-error input,
+.field.has-error textarea {
+  border-color: var(--danger);
+}
+
+.error {
+  min-height: 1em;
+  font-size: 0.78rem;
+  color: var(--danger);
+}
+
+button#submit-btn {
+  position: relative;
+  width: 100%;
+  background: var(--teal);
+  color: #0A1116;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+
+button#submit-btn:hover { background: #67DBD0; }
+button#submit-btn:active { transform: translateY(1px); }
+
+button#submit-btn:disabled {
+  cursor: progress;
+  opacity: 0.75;
+}
+
+.btn-spinner {
+  display: none;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 50%;
+  border: 2px solid rgba(10, 17, 22, 0.35);
+  border-top-color: #0A1116;
+}
+
+button#submit-btn.is-loading .btn-spinner {
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+}
+
+button#submit-btn.is-loading .btn-label { opacity: 0.6; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.form-status {
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  margin: 0.75rem 0 0;
+}
+
+.form-status.success { color: var(--teal); }
+.form-status.failure { color: var(--danger); }
+
+/* ---------- Board panel ---------- */
+.board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.board-head h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  margin: 0;
+}
+
+.counter {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink);
+  background: var(--amber);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-weight: 500;
+}
+
+.ticket-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.empty-state {
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+/* Ticket = a torn-stub card, the page's signature element */
+.ticket {
+  position: relative;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.9rem 1rem 0.9rem 1.1rem;
+  animation: ticket-in 0.35s ease;
+}
+
+.ticket::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--teal) 0 6px,
+    transparent 6px 12px
+  );
+  border-radius: 10px 0 0 10px;
+}
+
+@keyframes ticket-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ticket-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.ticket-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.ticket-time {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.ticket-message {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #C9D4DE;
+  word-break: break-word;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding-block: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 480px) {
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .ticket-list { max-height: none; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ticket { animation: none; }
+  .btn-spinner { animation: none; }
+  * { transition: none !important; }
+}

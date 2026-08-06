@@ -1,0 +1,102 @@
+<?php
+// --- PHP: a little server-side logic so the page isn't static ---
+date_default_timezone_set('Asia/Manila');
+
+$hour = (int) date('G');
+if ($hour < 12) {
+    $greeting = 'Good morning';
+} elseif ($hour < 18) {
+    $greeting = 'Good afternoon';
+} else {
+    $greeting = 'Good evening';
+}
+
+$serverTime  = date('l, j F Y — g:i A');
+$dataFile    = __DIR__ . '/feedback.json';
+$ticketCount = 0;
+
+if (file_exists($dataFile)) {
+    $existing    = json_decode(file_get_contents($dataFile), true);
+    $ticketCount = is_array($existing) ? count($existing) : 0;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Signal Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="noise"></div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">The Signal Board</span>
+      </div>
+      <p class="server-line">
+        <?= htmlspecialchars($greeting) ?> &middot; rendered by PHP at
+        <time><?= htmlspecialchars($serverTime) ?></time>
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+
+    <section class="panel form-panel" aria-labelledby="form-title">
+      <h1 id="form-title">Leave a signal</h1>
+      <p class="lede">
+        A short note goes straight to the board on the right — no reload,
+        no database, just a small PHP endpoint writing to a JSON file.
+      </p>
+
+      <form id="signal-form" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Ada Lovelace" autocomplete="name">
+          <span class="error" id="name-error"></span>
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" placeholder="What's on your mind?"></textarea>
+          <span class="error" id="message-error"></span>
+        </div>
+
+        <button type="submit" id="submit-btn">
+          <span class="btn-label">Send signal</span>
+          <span class="btn-spinner" aria-hidden="true"></span>
+        </button>
+
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="panel board-panel" aria-labelledby="board-title">
+      <div class="board-head">
+        <h2 id="board-title">On the board</h2>
+        <span class="counter" id="ticket-counter"><?= (int) $ticketCount ?></span>
+      </div>
+
+      <ul class="ticket-list" id="ticket-list" aria-live="polite">
+        <li class="empty-state" id="empty-state">No signals yet — be the first.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>HTML structures it, CSS shapes it, JavaScript moves it, PHP remembers it.</p>
+    </div>
+  </footer>
+
+<script src="script.js"></script>
+</body>
+</html>
